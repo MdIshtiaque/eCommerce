@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -34,7 +35,6 @@ class AuthController extends Controller
 
     public function login(Request $request): JsonResponse
     {
-        // dd($request->all());
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -54,8 +54,9 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        auth()->user()->tokens()->delete();
+        Session::invalidate();
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return response()->json(['message' => 'Logged out successfully', 'success' => true]);
     }
 }
