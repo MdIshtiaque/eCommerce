@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Acorn Admin Template | Login Page</title>
     <meta name="description" content="Login Page">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('backend.inc.style')
     <style>
         @font-face {
@@ -77,7 +78,8 @@
                                 </p>
                             </div>
                             <div>
-                                <form id="loginForm" class="tooltip-end-bottom" novalidate="novalidate">
+                                <form id="login-form" class="tooltip-end-bottom" method="POST" novalidate="novalidate">
+                                    @csrf
                                     <div class="mb-3 filled form-group tooltip-end-top">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -90,7 +92,7 @@
                                                 d="M14.5 4C15.9045 4 16.6067 4 17.1111 4.33706C17.3295 4.48298 17.517 4.67048 17.6629 4.88886C18 5.39331 18 6.09554 18 7.5L18 12.5C18 13.9045 18 14.6067 17.6629 15.1111C17.517 15.3295 17.3295 15.517 17.1111 15.6629C16.6067 16 15.9045 16 14.5 16L5.5 16C4.09554 16 3.39331 16 2.88886 15.6629C2.67048 15.517 2.48298 15.3295 2.33706 15.1111C2 14.6067 2 13.9045 2 12.5L2 7.5C2 6.09554 2 5.39331 2.33706 4.88886C2.48298 4.67048 2.67048 4.48298 2.88886 4.33706C3.39331 4 4.09554 4 5.5 4L14.5 4Z">
                                             </path>
                                         </svg>
-                                        <input class="form-control" placeholder="Email" name="email">
+                                        <input class="form-control" placeholder="Email" id="email   " name="email">
                                     </div>
                                     <div class="mb-3 filled form-group tooltip-end-top">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -104,7 +106,7 @@
                                                 d="M11 15H10 9M13 6V5C13 3.34315 11.6569 2 10 2V2C8.34315 2 7 3.34315 7 5V10">
                                             </path>
                                         </svg>
-                                        <input class="form-control pe-7" name="password" type="password"
+                                        <input class="form-control pe-7" name="password" id="password" type="password"
                                             placeholder="Password">
                                         <a class="text-small position-absolute t-3 e-3"
                                             href="Pages.Authentication.ForgotPassword.html">Forgot?</a>
@@ -717,5 +719,40 @@
 
 
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#login-form').on('submit', function(event) {
+            event.preventDefault();
+
+            var email = $('#email').val();
+            var password = $('#password').val();
+
+            $.ajax({
+                url: "{{ route('login') }}",
+                method: 'POST',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    email: email,
+                    password: password,
+                },
+                success: function(response) {
+                    // Handle success, e.g., redirect to the dashboard
+                    if (response.success == true) {
+                        window.location.href = "{{ route('dashboard') }}";
+                    }
+                },
+                error: function(xhr) {
+                    // Handle error, e.g., display error message
+                    var errorMessage = xhr.responseJSON.message;
+                    $('#error-message').text(errorMessage);
+                }
+            });
+        });
+    });
+</script>
 
 </html>
