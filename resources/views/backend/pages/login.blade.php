@@ -726,7 +726,6 @@
             event.preventDefault();
 
             var email = $('#email').val();
-            // console.log(email);
             var password = $('#password').val();
 
             $.ajax({
