@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>Acorn Admin Template | Ecommerce Dashboard</title>
     <meta name="description" content="Ecommerce Dashboard" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon Tags Start -->
     @include('backend.inc.style')
 </head>
@@ -18,7 +19,7 @@
             @yield('content')
         </main>
         <!-- Layout Footer Start -->
-        @include('backend.layout.footer')
+        {{-- @include('backend.layout.footer') --}}
         <!-- Layout Footer End -->
     </div>
 
