@@ -17,4 +17,8 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', function () {
     return view('backend.pages.login');
 })->name("home");
+
+Route::get('/register', function () {
+    return view('backend.pages.registration');
+})->name("register");
 Route::middleware('auth:sanctum')->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
