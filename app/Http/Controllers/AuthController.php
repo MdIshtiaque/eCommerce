@@ -12,7 +12,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
         $post_data = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
@@ -26,10 +25,9 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('authToken')->plainTextToken;
-
+        flash()->addSuccess('Your have successfully done your registration.');
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            'success' => true
         ]);
     }
 
@@ -43,9 +41,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
-
+            flash()->addSuccess('Your have successfully logged in.');
             return response()->json([
-                'token' => $token,
                 'success' => true
             ]);
         }
@@ -56,7 +53,7 @@ class AuthController extends Controller
     {
         auth()->user()->tokens()->delete();
         Session::invalidate();
-
+        flash()->addSuccess('Your have successfully logged out.');
         return response()->json(['message' => 'Logged out successfully', 'success' => true]);
     }
 }

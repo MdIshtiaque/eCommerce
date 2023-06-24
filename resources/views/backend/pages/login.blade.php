@@ -73,7 +73,7 @@
                                 <p class="h6">Please use your credentials to login.</p>
                                 <p class="h6">
                                     If you are not a member, please
-                                    <a href="Pages.Authentication.Register.html">register</a>
+                                    <a href="{{ route('register') }}">register</a>
                                     .
                                 </p>
                             </div>
@@ -742,6 +742,7 @@
                 success: function(response) {
                     // Handle success, e.g., redirect to the dashboard
                     if (response.success == true) {
+                        // flash()->addSuccess('You Have Successfully logged in');
                         window.location.href = "{{ route('dashboard') }}";
                     }
                 },
